@@ -1,0 +1,23 @@
+# ~/.omb_profile
+
+# Path to your oh-my-bash installation
+export OSH="$HOME/.local/share/.oh-my-bash"
+
+# Set the theme for the prompt
+OSH_THEME="agnoster"
+
+# Aliases to load
+aliases=(general)
+
+# Plugins to load
+plugins=(git bashmarks)
+
+# Allow oh-my-bash to use sudo
+OMB_USE_SUDO=true
+
+# Disable updates
+DISABLE_AUTO_UPDATE="true"
+
+# Load oh-my-bash framework
+source "$OSH"/oh-my-bash.sh
+
