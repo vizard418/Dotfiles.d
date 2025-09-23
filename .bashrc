@@ -19,7 +19,7 @@ esac
 
 if [ "$color_prompt" = yes ]; then
     PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)")'
-    PS1='[\[\e[32m\]\u@\h\[\e[0m\]]:\[\e[34m\]\w\n\[\e[0m\]${PS1_CMD1}\$> '
+    PS1='[\[\e[1;32m\]\u@\h\[\e[0m\]]:\[\e[1;34m\]\w\n\[\e[0m\]${PS1_CMD1}\$> '
 else
     PS1='\u@\h:\w\$ '
 fi
