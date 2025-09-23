@@ -21,14 +21,14 @@ order += "wireless _first_"
 order += "volume master"
 order += "tztime local"
 
+
 disk "/" {
-        format = "[DISK: %used]"
+        format = "[DISK: %used %percentage_used ⚡]"
 }
 
 memory {
-        format = "[MEM: %used]"
+        format = "[RAM: %used]"
 }
-
 
 ethernet _first_ {
         format_up = "[ETH: %speed-%ip]"
@@ -36,14 +36,13 @@ ethernet _first_ {
 }
 
 wireless _first_ {
-        format_up = "[WLAN: %essid-%ip]"
+        format_up = "[WLAN:%quality %essid %ip]"
         format_down = "[WLAN: DOWN]"
 }
 
-
 volume master {
         format = "[VOL: %volume]"
-        format_muted = "VOL: MUTED-%volume"
+        format_muted = "[MUTED: %volume]"
         device = "default"
         mixer = "Master"
         mixer_idx = 0
@@ -52,4 +51,3 @@ volume master {
 tztime local {
     format = "[ %A %d/%m/%Y  %H:%M]"
 }
-

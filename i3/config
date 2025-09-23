@@ -27,16 +27,14 @@ set $mon3 HDMI-1
 font pango:DejaVu Sans Mono 9
 
 # Window borders
-for_window [class="^.*"] border pixel 3
+for_window [class="^.*"] border pixel 2
 
 # Gaps between windows
-smart_gaps on
-gaps outer 3
+smart_gaps off
+
+gaps outer 2
 gaps inner 2
 
-# Floating
-for_window [title="Timer"] floating enable
-for_window [title="Calculator"] floating enable
 
 # Gruvbox Dark - Colores para ventanas
 client.focused            #458588 #458588 #282828 #458588 #458588
@@ -70,8 +68,8 @@ exec --no-startup-id picom &
 
 bar {
   status_command i3status
-  position top
-  height 24
+  position bottom
+  height 25
 
   colors {
     background        #282828
@@ -137,8 +135,6 @@ bindsym ctrl+$mod+Down exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@
 
 bindsym XF86AudioNext exec --no-startup-id playerctl next
 bindsym XF86AudioPrev exec --no-startup-id playerctl previous
-bindsym XF86AudioPlayPause exec --no-startup-id playerctl play-pause
-bindsym XF86AudioStop exec --no-startup-id playerctl stop
 
 ## Brightness control
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 10%+
@@ -171,8 +167,11 @@ exec --no-startup-id setxkbmap us
 bindsym $mod+l exec --no-startup-id setxkbmap us && xmessage -title "Keyboard" "Keyboard Layout US" &
 bindsym $mod+Shift+l exec --no-startup-id setxkbmap latam && xmessage -title "Keyboard" "Keyboard Layout Latam" &
 
-for_window [title="Keyboard"] floating enable
 
+# Floating
+for_window [title="Timer"] floating enable
+for_window [title="Calculator"] floating enable
+for_window [title="Keyboard"] floating enable
 
 # ===============================
 # RESIZE MODE
