@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Log Out
+Comment=Closes the current Window Manager (i3) session.
+Exec=i3-msg exit
+Icon=system-log-out-symbolic
+Categories=System;
+Terminal=false
+NoDisplay=false
