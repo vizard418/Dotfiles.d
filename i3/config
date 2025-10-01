@@ -113,6 +113,10 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
+## Split orientation
+bindsym $mod+v split v
+bindsym $mod+h split h
+
 ## Layout control
 bindsym $mod+f fullscreen toggle
 bindsym $mod+s layout stacking
@@ -123,6 +127,10 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 floating_modifier $mod
+
+for_window [title="Timer"] floating enable
+for_window [title="Calculator"] floating enable
+for_window [title="Keyboard"] floating enable
 
 ## Multimedia controls
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -169,11 +177,6 @@ exec --no-startup-id setxkbmap us
 bindsym $mod+l exec --no-startup-id setxkbmap us && xmessage -title "Keyboard" "Keyboard Layout US" &
 bindsym $mod+Shift+l exec --no-startup-id setxkbmap latam && xmessage -title "Keyboard" "Keyboard Layout Latam" &
 
-
-# Floating
-for_window [title="Timer"] floating enable
-for_window [title="Calculator"] floating enable
-for_window [title="Keyboard"] floating enable
 
 # ===============================
 # RESIZE MODE
