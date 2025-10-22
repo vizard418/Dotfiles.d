@@ -1,0 +1,25 @@
+configuration {
+	font: "DejaVu Sans 10";
+	yoffset: 0;
+  xoffset: 0;
+  show-icons: true;
+  terminal: "rofi-sensible-terminal";
+	drun-url-launcher: "xdg-open";
+	disable-history: false;
+  case-sensitive: false;
+	cycle: true;
+	click-to-exit: true;
+  max-history-size: 25;
+	completer-mode: "filebrowser";
+  timeout {
+      action: "kb-cancel";
+      delay:  0;
+  }
+  filebrowser {
+      directories-first: true;
+      sorting-method:    "name";
+  }
+}
+
+@theme "/usr/share/rofi/themes/gruvbox-dark.rasi"
+

@@ -1,0 +1,212 @@
+# ===============================
+# BASIC VARIABLES
+# ===============================
+
+# Mod key (usually the Super/Windows key)
+set $mod Mod4
+
+# Workspace names
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "VGA"
+set $ws6 "HDMI"
+
+
+# Monitor outputs
+set $mon1 LVDS-1
+set $mon2 VGA-1
+set $mon3 HDMI-1
+
+# ===============================
+# FONT AND GENERAL APPEARANCE
+# ===============================
+
+# Window font
+font pango:DejaVu Sans Mono 9
+
+# Window borders
+for_window [class="^.*"] border pixel 2
+
+# Gaps between windows
+smart_gaps off
+
+gaps outer 2
+gaps inner 2
+
+
+# Gruvbox Dark - Colores para ventanas
+client.focused            #458588 #458588 #282828 #458588 #458588
+client.focused_inactive   #282828 #282828 #928374 #928374 #928374
+client.unfocused          #928374 #282828 #928374 #928374 #928374
+client.urgent             #fb4934 #fb4934 #ffffff #fb4934 #fb4934
+client.placeholder        #1d2021 #1d2021 #ebdbb2 #1d2021 #1d2021
+client.background         #282828
+
+
+# ===============================
+# AUTOSTART SERVICES
+# ===============================
+# Disable screen blanking and power saving
+exec --no-startup-id xset s off
+exec --no-startup-id xset -dpms 600 600 600
+
+# Launches lxpolkit, the Polkit authentication agent
+exec --no-startup-id lxpolkit &
+
+# Autostart .desktop files
+exec --no-startup-id dex-autostart --autostart --environment i3
+
+# Network manager applet
+exec --no-startup-id nm-applet
+
+# Compositor (for transparency)
+exec --no-startup-id picom &
+
+# ===============================
+# I3 BAR (STATUS BAR)
+# ===============================
+
+bar {
+  status_command i3status
+  position top
+  height 25
+
+  colors {
+    background        #282828
+    statusline        #bdae93
+    separator         #282828
+
+    focused_workspace  #458588 #458588 #ebdbb2
+    active_workspace   #928374 #928374 #ebdbb2
+    inactive_workspace #928374 #928374 #ebdbb2
+    urgent_workspace   #cc241d #cc241d #ebdbb2
+    binding_mode       #98971a #98971a #ebdbb2
+  }
+}
+
+# ===============================
+# KEYBINDINGS
+# ===============================
+
+## Launchers
+bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Shift+d exec --no-startup-id "dmenu_run -nf '#ffffff' -nb '#222222' -sb '#fe8019' -sf '#ffffff' -fn 'monospace-10'"
+bindcode $mod+40 exec "rofi -modi drun,run -show drun"
+bindsym $mod+Shift+s exec --no-startup-id flameshot gui
+bindsym $mod+Shift+t exec --no-startup-id bash -c 'sleep 1800 && DISPLAY=:0 xmessage -title "Timer" "30m timeout reached"'
+
+## Kill focused window
+bindsym $mod+q kill
+bindsym $mod+Shift+q kill
+
+## Window focus
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+## Move windows
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+## Split orientation
+bindsym $mod+v split v
+bindsym $mod+h split h
+
+## Layout control
+bindsym $mod+f fullscreen toggle
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+## Floating windows
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+floating_modifier $mod
+
+for_window [title="Timer"] floating enable
+for_window [title="Calculator"] floating enable
+for_window [title="Keyboard"] floating enable
+
+## Multimedia controls
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+bindsym ctrl+$mod+Up exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym ctrl+$mod+Down exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+
+## Brightness control
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 10%+
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
+
+## Workspace switching
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+
+
+## Move window to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+
+## Config management
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+## Keyboard layout
+exec --no-startup-id setxkbmap us
+bindsym $mod+l exec --no-startup-id setxkbmap us && xmessage -title "Keyboard" "Keyboard Layout US" &
+bindsym $mod+Shift+l exec --no-startup-id setxkbmap latam && xmessage -title "Keyboard" "Keyboard Layout Latam" &
+
+
+# ===============================
+# RESIZE MODE
+# ===============================
+
+mode "resize" {
+  bindsym Left resize shrink width 4 px or 4 ppt
+  bindsym Down resize grow height 4 px or 4 ppt
+  bindsym Up resize shrink height 4 px or 4 ppt
+  bindsym Right resize grow width 4 px or 4 ppt
+
+  bindsym h resize shrink width 4 px or 4 ppt
+  bindsym j resize grow height 4 px or 4 ppt
+  bindsym k resize shrink height 4 px or 4 ppt
+  bindsym l resize grow width 4 px or 4 ppt
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# ===============================
+# MONITOR ASSIGNMENT
+# ===============================
+
+workspace $ws1 output $mon1
+workspace $ws2 output $mon1
+workspace $ws3 output $mon1
+workspace $ws4 output $mon1
+workspace $ws5 output $mon2
+workspace $ws6 output $mon3
