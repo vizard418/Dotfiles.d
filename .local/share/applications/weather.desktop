@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Weather Update
+Comment=Runs the custom weather script for i3status.
+Exec=/bin/bash -c "~/.config/i3status/scripts/weather.sh"
+Icon=weather-clear-symbolic
+Categories=Utility;
+Terminal=false
+NoDisplay=false
