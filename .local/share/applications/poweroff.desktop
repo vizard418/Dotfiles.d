@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name= Shut Down System
+Name=Shut Down System
 Comment=Fully powers off the operating system.
 Exec=systemctl poweroff
 Icon=system-shutdown-symbolic
