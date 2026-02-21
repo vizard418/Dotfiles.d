@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Redshift Night Light ON
+Comment=Set redshift to 4300K
+Exec=redshift -m randr -Pl 0:0 -O 4300
+Icon=weather-clear-night
+Categories=Utility;
+Terminal=false
+NoDisplay=false

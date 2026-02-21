@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Redshift Night Light OFF
+Comment=Set redshift to 6000K
+Exec=redshift -m randr -Pl 0:0 -O 6000
+Icon=weather-sunny
+Categories=Utility;
+Terminal=false
+NoDisplay=false
