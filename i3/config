@@ -64,6 +64,9 @@ exec --no-startup-id nm-applet
 # Compositor (for transparency)
 exec --no-startup-id picom &
 
+# Night light redshift
+exec --no-startup-id redshift -m randr -Pl 0:0 -O 4300
+
 # ===============================
 # I3 BAR (STATUS BAR)
 # ===============================
