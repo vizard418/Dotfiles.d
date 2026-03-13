@@ -1,0 +1,162 @@
+### --- Variables ---
+set $mod    Mod4
+set $left   h
+set $down   j
+set $up     k
+set $right  l
+
+set $term   xfce4-terminal
+set $menu   fuzzel
+
+# Workspaces y Monitores
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "VGA"
+set $ws6 "HDMI"
+
+set $mon1 LVDS-1
+set $mon2 VGA-1
+set $mon3 HDMI-1
+
+include /etc/sway/config-vars.d/*
+
+### --- Output & Input ---
+workspace $ws1 output $mon1
+workspace $ws2 output $mon1
+workspace $ws3 output $mon1
+workspace $ws4 output $mon1
+workspace $ws5 output $mon2
+workspace $ws6 output $mon3
+
+floating_modifier $mod normal
+
+### --- Key Bindings ---
+# Básicos
+bindsym $mod+Return  exec $term
+bindsym $mod+d       exec $menu
+bindsym $mod+q       kill
+bindsym Ctrl+q       kill
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'
+
+# Foco (Vim + Flechas)
+bindsym $mod+$left  focus left
+bindsym $mod+$down  focus down
+bindsym $mod+$up    focus up
+bindsym $mod+$right focus right
+bindsym $mod+Left   focus left
+bindsym $mod+Down   focus down
+bindsym $mod+Up     focus up
+bindsym $mod+Right  focus right
+
+# Mover Ventanas (Vim + Flechas)
+bindsym $mod+Shift+$left  move left
+bindsym $mod+Shift+$down  move down
+bindsym $mod+Shift+$up    move up
+bindsym $mod+Shift+$right move right
+bindsym $mod+Shift+Left   move left
+bindsym $mod+Shift+Down   move down
+bindsym $mod+Shift+Up     move up
+bindsym $mod+Shift+Right  move right
+
+# Workspaces
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+
+# Layout
+bindsym $mod+b           splith
+bindsym $mod+v           splitv
+bindsym $mod+s           layout stacking
+bindsym $mod+w           layout tabbed
+bindsym $mod+e           layout toggle split
+bindsym $mod+f           fullscreen
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space       focus mode_toggle
+bindsym $mod+a           focus parent
+
+# Modo Resize
+mode "resize" {
+    bindsym $left  resize shrink width 10px
+    bindsym $down  resize grow height 10px
+    bindsym $up    resize shrink height 10px
+    bindsym $right resize grow width 10px
+    bindsym Left   resize shrink width 10px
+    bindsym Down   resize grow height 10px
+    bindsym Up     resize shrink height 10px
+    bindsym Right  resize grow width 10px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+### --- Utilities (Audio / Brillo) ---
+bindsym --locked XF86AudioMute         exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym --locked XF86AudioLowerVolume  exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym --locked XF86AudioRaiseVolume  exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+bindsym --locked XF86AudioMicMute      exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindsym ctrl+$mod+Up                   exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+
+bindsym ctrl+$mod+Down                 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym --locked XF86MonBrightnessUp   exec brightnessctl set 5%+
+
+### --- Screenshots ---
+set $ss_dir "$(xdg-user-dir PICTURES)/Screenshots"
+bindsym Print         exec mkdir -p $ss_dir && grim "$ss_dir/$(date +%Y-%m-%d_%H-%M-%S).png"
+bindsym $mod+Print    exec mkdir -p $ss_dir && grim -g "$(slurp)" "$ss_dir/$(date +%Y-%m-%d_%H-%M-%S).png"
+bindsym $mod+Shift+s  exec grim -g "$(slurp)" - | wl-copy
+
+### --- Appearance (Gruvbox Dark) ---
+smart_gaps off
+gaps inner 2
+gaps outer 2
+default_border          pixel 2
+default_floating_border pixel 2
+
+# class                 border  backgr. text    indicat. child_border
+client.focused          #458588 #458588 #282828 #458588  #458588
+client.focused_inactive #282828 #282828 #928374 #928374  #928374
+client.unfocused        #928374 #282828 #928374 #928374  #928374
+client.urgent           #fb4934 #fb4934 #ffffff #fb4934  #fb4934
+client.placeholder      #1d2021 #1d2021 #ebdbb2 #1d2021  #1d2021
+client.background       #282828
+
+### --- Window Rules ---
+# Forzar modo flotante para ventanas de sistema y diálogos
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="notification"] floating enable
+for_window [window_type="toolbar"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [window_type="utility"] floating enable
+
+# Regla específica para Mako (notificaciones)
+for_window [app_id="mako"] floating enable
+for_window [app_id="mako"] border none
+
+### --- Status Bar ---
+bar {
+    swaybar_command waybar
+}
+
+### --- Autostart ---
+exec mako
+exec lxpolkit
+exec xhost +si:localuser:root
+exec gammastep -O 5500
+exec swaymsg workspace $ws1
+
+include /etc/sway/config.d/*
