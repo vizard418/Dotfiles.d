@@ -47,10 +47,21 @@
     },
 
     "pulseaudio": {
-        "format": "VOL {volume}%",
-        "format-muted": "MUTED",
-        "on-click": "pavucontrol"
-    },
+            "format": "{icon} {volume}%",
+            "format-bluetooth": "{icon} (BT) {volume}%",
+            "format-muted": "Muted",
+            "format-icons": {
+                "headphone": "Headphone",
+                "hands-free": "Handsfree",
+                "headset": "Headset",
+                "phone": "Telphone",
+                "portable": "Portable",
+                "car": "Car",
+                "default": ["Speakers"]
+            },
+            "on-click": "~/.config/waybar/audio.sh",
+            "on-click-right": "pavucontrol"
+        },
 
     "custom/weather": {
         "exec": "~/.config/waybar/weather.sh",
