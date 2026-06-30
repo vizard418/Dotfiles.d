@@ -140,6 +140,7 @@ sudo apt install xserver-xorg-input-libinput
 sudo apt install libinput-tools
 sudo apt install brightnessctl
 sudo apt install wireplumber
+sudo apt install pulseaudio-utils
 ```
 
 * **Synaptics Touchpad Driver (Optional)**
@@ -218,6 +219,7 @@ sudo apt install brightnessctl # brightness control utility
 sudo apt install playerctl # media player control from CLI
 sudo apt install network-manager # network manager service
 sudo apt install network-manager-gnome # nm-applet system tray
+sudo apt install pasystray # applet audio system tray
 sudo apt install dex # autostart .desktop files in i3 sessions
 sudo apt install lxpolkit # polkit authentication agent
 sudo apt install gparted # graphical partition editor
