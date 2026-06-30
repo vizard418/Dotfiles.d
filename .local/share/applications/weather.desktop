@@ -2,8 +2,8 @@
 Type=Application
 Name=Weather Forecast
 Comment=Muestra el clima actual
-Exec= bash "~/.config/i3status/weather.sh"
+Exec= bash -c "~/.config/i3status/weather.sh"
 Icon=weather-few-clouds
 Categories=Utility;
-Terminal=true
+Terminal=false
 NoDisplay=false
