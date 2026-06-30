@@ -69,6 +69,9 @@ exec --no-startup-id lxpolkit &
 # Autostart .desktop entries
 exec --no-startup-id dex-autostart --autostart --environment i3
 
+# Indicador de volumen en la bandeja del sistema
+exec --no-startup-id pasystray &
+
 # Network manager tray
 exec --no-startup-id nm-applet
 
@@ -78,7 +81,6 @@ exec --no-startup-id picom &
 # Night light
 exec --no-startup-id redshift -m randr -Pl 0:0 -O 4300
 
-
 # =========================================================
 # STATUS BAR
 # =========================================================
@@ -87,6 +89,11 @@ bar {
     status_command i3status
     position top
     height 25
+
+    # Clic izquierdo (button1) sobre la barra ejecuta tu script para alternar audio
+    bindsym button1 exec --no-startup-id ~/.config/waybar/audio.sh && sleep 0.3 && (pactl list sinks | grep -q "Active Port:.*headphone" && echo "HEADPHONES" > ~/.cache/i3status/audio-dev || echo "SPEAKERS" > ~/.cache/i3status/audio-dev) && killall -SIGUSR1 i3status
+    # Clic derecho (button3) abre el mezclador gráfico pavucontrol
+    bindsym button3 exec --no-startup-id pavucontrol
 
     colors {
         background        #282828
