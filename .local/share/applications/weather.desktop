@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Weather Forecast
+Comment=Muestra el clima actual
+Exec= bash "~/.config/i3status/weather.sh"
+Icon=weather-few-clouds
+Categories=Utility;
+Terminal=true
+NoDisplay=false

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Redshift ON
+Comment=Inicia redshift con configuracion personalizada
+Exec=bash -c "redshift -m randr -Pl 0:0 -O 4300"
+Icon=redshift-status-on
+Categories=System;
+Terminal=false
+NoDisplay=false

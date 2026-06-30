@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Redshift OFF
+Comment=Detiene redshift
+Exec=redshift -x
+Icon=redshift-status-off
+Categories=System;
+Terminal=false
+NoDisplay=false
