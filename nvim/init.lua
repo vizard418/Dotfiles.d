@@ -98,3 +98,19 @@ opt.listchars = {
 -- Mapping
 vim.keymap.set('i', '<C-Space>', '<C-n>', { noremap = true, silent = true })
 
+-- Autocompletado basico con la tecla Tab o C-n / C-p
+vim.keymap.set('i', '<Tab>', function()
+    if vim.fn.pumvisible() == 1 then
+        return '<C-n>'
+    else
+        return '<Tab>'
+    end
+end, { expr = true, silent = true })
+
+vim.keymap.set('i', '<S-Tab>', function()
+    if vim.fn.pumvisible() == 1 then
+        return '<C-p>'
+    else
+        return '<S-Tab>'
+    end
+end, { expr = true, silent = true })
