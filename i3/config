@@ -35,7 +35,7 @@ for_window [class="^.*"] border pixel 2
 
 # Gaps
 smart_gaps off
-gaps outer 2
+gaps outer 3
 gaps inner 2
 
 # =========================================================
@@ -88,10 +88,10 @@ exec --no-startup-id redshift -m randr -Pl 0:0 -O 4300
 bar {
     status_command i3status
     position top
-    height 25
+    height 27
 
     # Clic izquierdo (button1) sobre la barra ejecuta tu script para alternar audio
-    bindsym button1 exec --no-startup-id ~/.config/waybar/audio.sh && sleep 0.3 && (pactl list sinks | grep -q "Active Port:.*headphone" && echo "HEADPHONES" > ~/.cache/i3status/audio-dev || echo "SPEAKERS" > ~/.cache/i3status/audio-dev) && killall -SIGUSR1 i3status
+    bindsym button1 exec --no-startup-id ~/.config/i3status/audio.sh && sleep 0.3 && (pactl list sinks | grep -q "Active Port:.*headphone" && echo "HEADPHONES" > ~/.cache/i3status/audio-dev || echo "SPEAKERS" > ~/.cache/i3status/audio-dev) && killall -SIGUSR1 i3status
     # Clic derecho (button3) abre el mezclador gráfico pavucontrol
     bindsym button3 exec --no-startup-id pavucontrol
 
@@ -123,6 +123,9 @@ bindsym $mod+Shift+s exec --no-startup-id flameshot gui
 
 bindsym $mod+Shift+t exec --no-startup-id bash -c 'sleep 1800 && DISPLAY=:0 xmessage -title "Timer" "30m timeout reached"'
 
+# Lanzar rofi modo ventana (listar aplicaciones activas)
+# Simula comportamiento de Alt+TAB
+bindsym Mod1+Tab exec --no-startup-id rofi -show window
 
 # =========================================================
 # WINDOW MANAGEMENT
