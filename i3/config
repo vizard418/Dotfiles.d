@@ -90,11 +90,6 @@ bar {
     position top
     height 27
 
-    # Clic izquierdo (button1) sobre la barra ejecuta tu script para alternar audio
-    bindsym button1 exec --no-startup-id ~/.config/i3status/audio.sh && sleep 0.3 && (pactl list sinks | grep -q "Active Port:.*headphone" && echo "HEADPHONES" > ~/.cache/i3status/audio-dev || echo "SPEAKERS" > ~/.cache/i3status/audio-dev) && killall -SIGUSR1 i3status
-    # Clic derecho (button3) abre el mezclador gráfico pavucontrol
-    bindsym button3 exec --no-startup-id pavucontrol
-
     colors {
         background        #282828
         statusline        #bdae93

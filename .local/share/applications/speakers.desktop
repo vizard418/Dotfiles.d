@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Cambiar a Altavoces
+Comment=Cambia la salida de audio a altavoces
+Exec=bash -c "~/.config/i3status/audio-speakers.sh"
+Icon=audio-speakers
+Type=Application
+Terminal=false
+Categories=Utility;
