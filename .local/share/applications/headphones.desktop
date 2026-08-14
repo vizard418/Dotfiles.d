@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Cambiar a Auriculares
-Comment=Cambia la salida de audio a auriculares
+Name=Set Headphones
+Comment=Set audio to headphones
 Exec=bash -c "~/.config/i3status/audio-headphones.sh"
 Icon=audio-headphones
 Type=Application
