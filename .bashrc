@@ -16,8 +16,8 @@ case "$TERM" in
 esac
 
 if [ "$color_prompt" = yes ]; then
-    PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 "(%s branch)")'
-    PS1='[\[\e[1;32m\]\u@\e[1;33m\]\h\[\e[0m\]]:\[\e[1;34m\]\w\n\[\e[0m\]${PS1_CMD1}\$ '
+    PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 "branch:%s")'
+    PS1='\[\e[1;32m\]┌─[\[\e[1;37m\]\u\[\e[1;32m\]@\[\e[1;33m\]\h\[\e[1;32m\]]──[\[\e[0;36m\]\w\[\e[1;32m\]]\n\[\e[1;32m\]└─>\[\e[0m\] \[\e[1;30m\]|\[\e[0;32m\] ${PS1_CMD1}\[\e[0m\] \[\e[1;32m\]\$\[\e[0m\] '
 else
     PS1='\u@\h:\w\$ '
 fi
