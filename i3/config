@@ -79,7 +79,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id picom &
 
 # Night light
-exec --no-startup-id redshift -m randr -Pl 0:0 -O 4300
+exec --no-startup-id redshift -m randr -Pl 0:0 -O 4000
 
 # =========================================================
 # STATUS BAR
