@@ -1,5 +1,5 @@
 configuration {
-	font: "DejaVu Sans 8";
+	font: "DejaVu Sans 12";
 	yoffset: 0;
   xoffset: 0;
   show-icons: true;

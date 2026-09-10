@@ -18,7 +18,7 @@
 # - brightnessctl: Utilidad de linea de comandos para controlar el brillo de la pantalla
 # ==============================================================================
 # Fuente principal para titulos de ventanas y la barra
-font pango:JetBrains Mono 9
+font pango:JetBrains Mono 10
 
 # Definicion de la tecla Modificadora principal (Mod4 = Super / Tecla Windows)
 set $mod Mod4
@@ -28,11 +28,11 @@ set $mod Mod4
 # ==============================================================================
 
 # Bloqueador de pantalla vinculado al suspender sistema
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -n -c 000000
-exec --no-startup-id xset s 600 600
-# exec --no-startup-id xset s blank
-# exec --no-startup-id xset +dpms
-# exec --no-startup-id xset dpms 0 0 600
+exec --no-startup-id xset s off
+exec --no-startup-id xset s noblank
+exec --no-startup-id xset s noexpose
+exec --no-startup-id xset dpms 0 0 0
+
 
 # Factor DPI para monitores grandes
 exec --no-startup-id xrdb -merge ~/.Xresources
@@ -70,12 +70,6 @@ bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 # ==============================================================================
 # SECCION: VARIABLES Y ATAJOS PRINCIPALES
 # ==============================================================================
-
-# Mapeo de teclas estilo Vim para movimiento (j, k, l, ;)
-set $up l
-set $down k
-set $left j
-set $right semicolon
 
 # Modificador para arrastrar ventanas flotantes con el raton
 floating_modifier $mod
@@ -116,11 +110,11 @@ bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
-# Mover ventana enfocada
-bindsym $mod+Shift+$left move left
-bindsym $mod+Shift+$down move down
-bindsym $mod+Shift+$up move up
-bindsym $mod+Shift+$right move right
+# Mover ventana enfocada con flechas
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
 
 # Modos de division horizontal y vertical
 bindsym $mod+h split h
@@ -156,12 +150,6 @@ set $mon3 HDMI-1
 # Asignacion de workspaces a monitores segun preferencia
 workspace $ws5 output $mon2
 workspace $ws6 output $mon3
-
-# Asignar aplicaciones a workspaces especificos
-assign [class="xfce4-terminal"] 2
-assign [class="Alacritty"] 2
-assign [class="Brave-browser"] 1
-assign [class="Thunar"] 4
 
 # Cambiar a espacio de trabajo
 bindsym $mod+1 workspace number $ws1
@@ -227,7 +215,7 @@ client.background       #282828
 bar {
         status_command i3status
         position top
-        height 22
+        height 24
         colors {
                 background #282828
                 statusline #ebdbb2
