@@ -114,3 +114,18 @@ vim.keymap.set('i', '<S-Tab>', function()
         return '<S-Tab>'
     end
 end, { expr = true, silent = true })
+
+
+-- Salto entre clases y defs usando J (siguiente) y K (anterior)
+vim.keymap.set('n', 'J', function()
+    -- Mueve el cursor un carácter a la derecha para obligar a buscar desde la siguiente posición
+    local pos = vim.fn.getpos('.')
+    vim.fn.cursor(pos[2], pos[3] + 1)
+    
+    -- Busca la siguiente ocurrencia de class o def
+    vim.fn.search('^[[:space:]]*\\(class\\|def\\)[[:space:]]\\+', 'W')
+end, { desc = "Siguiente funcion o clase" })
+
+vim.keymap.set('n', 'K', function()
+    vim.fn.search('^[[:space:]]*\\(class\\|def\\)[[:space:]]\\+', 'Wb')
+end, { desc = "Funcion o clase anterior" })
