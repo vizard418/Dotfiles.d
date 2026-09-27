@@ -14,13 +14,13 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.shiftwidth = 4
         vim.bo.expandtab = true
 
-        -- Crear comando :XSQL para ejecutar el rango seleccionado usando el alias
         vim.api.nvim_buf_create_user_command(0, "SQLCMD", function(opts)
             local lines = vim.fn.getline(opts.line1, opts.line2)
             local query = table.concat(lines, "\n")
 
             local tmp_file = os.tmpname()
             local f = io.open(tmp_file, "w")
+
             if f then
                 f:write(query)
                 f:close()
@@ -29,23 +29,49 @@ vim.api.nvim_create_autocmd("FileType", {
                 return
             end
 
-            local cmd = string.format("bash -ic 'SQLCMD_CONNECT -i %s'", tmp_file)
-            vim.cmd("botright split | term " .. cmd)
+            local cmd = string.format(
+                "bash -ic 'SQLCMD_CONNECT -i %s'",
+                tmp_file
+            )
 
-            -- Configurar para que al salir de la terminal se cierre la ventana automaticamente si termino con exito
-            vim.cmd("startinsert")
+            vim.cmd("botright split | term " .. cmd)
 
             vim.defer_fn(function()
                 os.remove(tmp_file)
-            end, 5000)
-        end, { range = true, desc = "Ejecutar seleccion T-SQL con sqlcmd_connect" })
+
+                if vim.bo.buftype == "terminal" then
+                    vim.cmd("stopinsert")
+                end
+            end, 500)
+
+            vim.defer_fn(function()
+                if vim.bo.buftype == "terminal" then
+                    vim.cmd("stopinsert")
+                end
+            end, 1000)
+        end, {
+            range = true,
+            desc = "Ejecutar seleccion T-SQL con sqlcmd_connect",
+        })
     end,
 })
 
--- Autocomando global para cerrar facilmente las ventanas de terminal con 'q'
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "term",
+-- Configuracion de ventanas de terminal
+vim.api.nvim_create_autocmd("TermOpen", {
     callback = function()
-        vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = true, silent = true })
+        vim.opt_local.number = false
+        vim.opt_local.relativenumber = false
+        vim.opt_local.cursorline = false
+
+        vim.keymap.set("n", "q", "<cmd>close<CR>", {
+            buffer = true,
+            silent = true,
+            desc = "Cerrar resultado SQL",
+        })
+
+        vim.keymap.set("n", "<Esc>", "<cmd>stopinsert<CR>", {
+            buffer = true,
+            silent = true,
+        })
     end,
 })
