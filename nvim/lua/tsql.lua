@@ -29,7 +29,7 @@ vim.api.nvim_create_autocmd("FileType", {
                 return
             end
 
-            local cmd = string.format("bash -ic 'SQLCMD_CONNET -i %s'", tmp_file)
+            local cmd = string.format("bash -ic 'SQLCMD_CONNECT -i %s'", tmp_file)
             vim.cmd("botright split | term " .. cmd)
 
             -- Configurar para que al salir de la terminal se cierre la ventana automaticamente si termino con exito
