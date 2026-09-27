@@ -69,15 +69,28 @@ Para ejecutar una consulta:
 
 1. Abre un archivo `.sql` o `.tsql`.
 2. Selecciona el codigo en modo visual usando `Shift+V`.
-3. Ejecuta:
+3. Ejecuta la consulta utilizando cualquiera de estas opciones:
 
 ```vim
 :SQLCMD
 ```
 
-4. La consulta se ejecutara mediante `SQLCMD_CONNECT`.
-5. El resultado se mostrara en una terminal dividida dentro de Neovim.
-6. Presiona `q` dentro del panel de terminal para cerrarlo.
+o:
+
+```text
+Alt+Enter
+```
+
+`Alt+Enter` ejecuta el mismo comando `:SQLCMD` sobre el bloque seleccionado.
+
+El resultado se mostrara en una terminal dividida dentro de Neovim.
+
+Dentro del panel de resultados:
+
+* `j` / `k` permiten navegar entre las lineas.
+* Las flechas permiten navegar entre las lineas.
+* `q` cierra el panel y vuelve al editor.
+* `Esc` permite salir del modo de insercion de la terminal.
 
 
 ## Explorador MSSQL

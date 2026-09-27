@@ -5,6 +5,8 @@ vim.filetype.add({
     },
 })
 
+local editor_win = nil
+
 -- Opciones y comandos especificos para archivos SQL/T-SQL
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "sql",
@@ -28,6 +30,8 @@ vim.api.nvim_create_autocmd("FileType", {
                 print("Error: No se pudo crear archivo temporal")
                 return
             end
+
+            editor_win = vim.api.nvim_get_current_win()
 
             local cmd = string.format(
                 "bash -ic 'SQLCMD_CONNECT -i %s'",
@@ -63,10 +67,21 @@ vim.api.nvim_create_autocmd("TermOpen", {
         vim.opt_local.relativenumber = false
         vim.opt_local.cursorline = false
 
-        vim.keymap.set("n", "q", "<cmd>close<CR>", {
+        vim.keymap.set("n", "q", function()
+            local terminal_win = vim.api.nvim_get_current_win()
+
+            if vim.api.nvim_win_is_valid(terminal_win) then
+                vim.api.nvim_win_close(terminal_win, true)
+            end
+
+            if editor_win
+                and vim.api.nvim_win_is_valid(editor_win) then
+                vim.api.nvim_set_current_win(editor_win)
+            end
+        end, {
             buffer = true,
             silent = true,
-            desc = "Cerrar resultado SQL",
+            desc = "Cerrar resultado SQL y volver al editor",
         })
 
         vim.keymap.set("n", "<Esc>", "<cmd>stopinsert<CR>", {

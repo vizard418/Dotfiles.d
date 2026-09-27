@@ -32,3 +32,9 @@ end, { desc = "Siguiente funcion o clase" })
 vim.keymap.set('n', 'K', function()
     vim.fn.search('^[[:space:]]*\\(class\\|def\\)[[:space:]]\\+', 'Wb')
 end, { desc = "Funcion o clase anterior" })
+
+-- Ejecutar SQL seleccionado
+vim.keymap.set("v", "<M-CR>", ":SQLCMD<CR>", {
+    silent = true,
+    desc = "Ejecutar SQL seleccionado",
+})
