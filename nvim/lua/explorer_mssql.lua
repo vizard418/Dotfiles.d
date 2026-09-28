@@ -594,15 +594,61 @@ local function open_node()
     end
 end
 
-local function refresh()
-    local cursor = { 1, 0 }
-
-    if state.win
-        and vim.api.nvim_win_is_valid(state.win) then
-        cursor = vim.api.nvim_win_get_cursor(state.win)
+local function node_key(node)
+    if node.type == "root" then
+        return "root"
     end
 
-    state.nodes = {
+    if node.type == "category" then
+        return string.format(
+            "category:%s:%s",
+            node.database,
+            node.category
+        )
+    end
+
+    if node.type == "database" then
+        return "database:" .. node.database
+    end
+
+    if node.type == "table" then
+        return string.format(
+            "table:%s:%s",
+            node.database,
+            node.object
+        )
+    end
+
+    if node.type == "object" then
+        return string.format(
+            "object:%s:%s:%s",
+            node.database,
+            node.category,
+            node.object
+        )
+    end
+
+    return nil
+end
+
+local function save_expanded_state()
+    local expanded = {}
+
+    for _, node in ipairs(state.nodes) do
+        if node.expanded then
+            local key = node_key(node)
+
+            if key then
+                expanded[key] = true
+            end
+        end
+    end
+
+    return expanded
+end
+
+local function build_tree(expanded)
+    local nodes = {
         {
             type = "root",
             name = "SQL Server",
@@ -619,12 +665,62 @@ local function refresh()
 
     local databases = database_nodes()
 
-    for _, node in ipairs(databases) do
-        table.insert(
-            state.nodes,
-            node
-        )
+    for _, database in ipairs(databases) do
+        local database_key = node_key(database)
+
+        database.expanded = expanded[database_key] == true
+
+        table.insert(nodes, database)
+
+        if database.expanded then
+            local categories = category_nodes(database.database)
+
+            for _, category in ipairs(categories) do
+                local category_key = node_key(category)
+
+                category.expanded = expanded[category_key] == true
+
+                table.insert(nodes, category)
+
+                if category.expanded then
+                    local objects = object_nodes(category)
+
+                    for _, object in ipairs(objects) do
+                        local object_key = node_key(object)
+
+                        object.expanded = expanded[object_key] == true
+
+                        table.insert(nodes, object)
+
+                        if object.expanded
+                            and object.type == "table" then
+
+                            local columns = table_columns(object)
+
+                            for _, column in ipairs(columns) do
+                                table.insert(nodes, column)
+                            end
+                        end
+                    end
+                end
+            end
+        end
     end
+
+    return nodes
+end
+
+local function refresh()
+    local cursor = { 1, 0 }
+
+    if state.win
+        and vim.api.nvim_win_is_valid(state.win) then
+        cursor = vim.api.nvim_win_get_cursor(state.win)
+    end
+
+    local expanded = save_expanded_state()
+
+    state.nodes = build_tree(expanded)
 
     render()
 
@@ -690,6 +786,11 @@ local function close()
 end
 
 local function setup_buffer()
+    vim.api.nvim_buf_set_name(
+        state.buf,
+        "ExploreMSSQL"
+    )
+
     vim.bo[state.buf].buftype = "nofile"
     vim.bo[state.buf].bufhidden = "hide"
     vim.bo[state.buf].swapfile = false
@@ -752,7 +853,7 @@ local function setup_buffer()
 end
 
 local function create_panel()
-    vim.cmd("topleft " .. state.width .. "vnew")
+    vim.cmd("topleft " .. state.width .. "vsplit")
 
     state.win = vim.api.nvim_get_current_win()
 
@@ -772,6 +873,8 @@ local function open()
 
         return
     end
+
+    local first_open = false
 
     if not state.buf
         or not vim.api.nvim_buf_is_valid(state.buf) then
@@ -794,11 +897,17 @@ local function open()
                 expanded = true,
             },
         }
+
+        first_open = true
     end
 
     create_panel()
 
-    refresh()
+    if first_open then
+        refresh()
+    else
+        render()
+    end
 end
 
 vim.keymap.set("n", "<C-h>", function()
