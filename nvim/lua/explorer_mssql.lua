@@ -297,6 +297,14 @@ local function category_nodes(database)
             category = "functions",
             database = database,
         },
+        {
+            type = "category",
+            name = "Triggers",
+            depth = 2,
+            expanded = false,
+            category = "triggers",
+            database = database,
+        },
     }
 end
 
@@ -348,6 +356,20 @@ ORDER BY
     s.name,
     o.name
 ]], database, database),
+
+        triggers = string.format([[
+SELECT
+    s.name + '.' + tr.name
+FROM [%s].sys.triggers tr
+INNER JOIN [%s].sys.objects o
+    ON o.object_id = tr.parent_id
+INNER JOIN [%s].sys.schemas s
+    ON s.schema_id = o.schema_id
+WHERE tr.parent_class = 1
+ORDER BY
+    s.name,
+    tr.name
+]], database, database, database),
     }
 
     local objects = query_list(queries[node.category])
