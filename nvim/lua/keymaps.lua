@@ -38,3 +38,6 @@ vim.keymap.set("v", "<M-CR>", ":SQLCMD<CR>", {
     silent = true,
     desc = "Ejecutar SQL seleccionado",
 })
+
+-- Salir del modo terminal con Esc
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { silent = true })
