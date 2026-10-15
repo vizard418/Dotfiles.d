@@ -22,7 +22,10 @@ local function current_node()
 end
 
 local function node_icon(node)
-    if node.type == "root" then
+    if node.type == "root"
+        or node.type == "files_header"
+        or node.type == "buffers_header"
+        or node.type == "empty" then
         return ""
     end
 
@@ -31,6 +34,10 @@ local function node_icon(node)
             return "▾"
         end
         return "▸"
+    end
+
+    if node.type == "open_buffer" then
+        return "▪"
     end
 
     return "·"
@@ -51,7 +58,10 @@ local function has_next_sibling(index, depth)
 end
 
 local function tree_prefix(index, node)
-    if node.depth == 0 then
+    if node.depth == 0
+        or node.type == "files_header"
+        or node.type == "buffers_header"
+        or node.type == "empty" then
         return ""
     end
 
@@ -90,6 +100,23 @@ end
 local function node_text(index, node)
     if node.type == "root" then
         return node.name
+    end
+
+    if node.type == "files_header" then
+        return "--- Files ---"
+    end
+
+    if node.type == "buffers_header" then
+        return "--- Buffers ---"
+    end
+
+    if node.type == "empty" then
+        return ""
+    end
+
+    if node.type == "open_buffer" then
+        local active_marker = node.is_current and "* " or "  "
+        return string.format("  %s%s", active_marker, node.name)
     end
 
     local prefix = tree_prefix(index, node)
@@ -249,6 +276,18 @@ local function open_file(node)
     end
 end
 
+local function switch_to_buffer(node)
+    local editor_win = open_editor()
+
+    if not editor_win then
+        return
+    end
+
+    if vim.api.nvim_buf_is_valid(node.bufnr) then
+        vim.api.nvim_set_current_buf(node.bufnr)
+    end
+end
+
 local function toggle_node(node)
     if not node then
         return
@@ -256,7 +295,15 @@ local function toggle_node(node)
 
     local row = vim.api.nvim_win_get_cursor(state.win)[1]
 
-    if node.type == "root" then
+    if node.type == "root"
+        or node.type == "files_header"
+        or node.type == "buffers_header"
+        or node.type == "empty" then
+        return
+    end
+
+    if node.type == "open_buffer" then
+        switch_to_buffer(node)
         return
     end
 
@@ -304,12 +351,21 @@ local function open_node()
 
     if node.type == "file" then
         open_file(node)
+    elseif node.type == "open_buffer" then
+        switch_to_buffer(node)
     end
 end
 
 local function node_key(node)
-    if node.type == "root" then
-        return "root"
+    if node.type == "root"
+        or node.type == "files_header"
+        or node.type == "buffers_header"
+        or node.type == "empty" then
+        return node.type
+    end
+
+    if node.type == "open_buffer" then
+        return "buf:" .. node.bufnr
     end
 
     return node.type .. ":" .. node.path
@@ -331,6 +387,41 @@ local function save_expanded_state()
     return expanded
 end
 
+local function get_open_buffers_nodes()
+    local nodes = {
+        {
+            type = "empty",
+            depth = 0,
+        },
+        {
+            type = "buffers_header",
+            name = "Buffers",
+            depth = 0,
+            expanded = true,
+        }
+    }
+
+    local current_buf = vim.api.nvim_get_current_buf()
+
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "" then
+            local name = vim.api.nvim_buf_get_name(buf)
+            if name ~= "" then
+                local display_name = vim.fn.fnamemodify(name, ":t")
+                table.insert(nodes, {
+                    type = "open_buffer",
+                    name = display_name,
+                    bufnr = buf,
+                    depth = 1,
+                    is_current = (buf == current_buf),
+                })
+            end
+        end
+    end
+
+    return nodes
+end
+
 local function build_tree(expanded)
     local root_name = vim.fn.fnamemodify(
         state.root_path,
@@ -338,6 +429,12 @@ local function build_tree(expanded)
     )
 
     local nodes = {
+        {
+            type = "files_header",
+            name = "Files",
+            depth = 0,
+            expanded = true,
+        },
         {
             type = "root",
             name = root_name ~= ""
@@ -373,6 +470,11 @@ local function build_tree(expanded)
         end
     end
 
+    local buffer_nodes = get_open_buffers_nodes()
+    for _, b_node in ipairs(buffer_nodes) do
+        table.insert(nodes, b_node)
+    end
+
     return nodes
 end
 
@@ -390,15 +492,17 @@ local function refresh()
 
     render()
 
-    local row = math.min(
-        cursor[1],
-        #state.nodes
-    )
+    if state.win and vim.api.nvim_win_is_valid(state.win) then
+        local row = math.min(
+            cursor[1],
+            #state.nodes
+        )
 
-    vim.api.nvim_win_set_cursor(
-        state.win,
-        { row, 0 }
-    )
+        vim.api.nvim_win_set_cursor(
+            state.win,
+            { row, 0 }
+        )
+    end
 end
 
 local function resize_panel(delta)
@@ -425,8 +529,8 @@ local function show_help()
         table.concat({
             "ExploreFiles",
             "",
-            "<CR>  Expandir / contraer / abrir archivo",
-            "o     Abrir archivo",
+            "<CR>  Expandir / contraer / abrir buffer",
+            "o     Abrir archivo / buffer",
             "r     Refrescar",
             "q     Ocultar panel",
             ">     Agrandar panel",
@@ -556,6 +660,12 @@ local function open()
 
         state.nodes = {
             {
+                type = "files_header",
+                name = "Files",
+                depth = 0,
+                expanded = true,
+            },
+            {
                 type = "root",
                 name = vim.fn.fnamemodify(
                     state.root_path,
@@ -578,6 +688,24 @@ local function open()
         render()
     end
 end
+
+local augroup = vim.api.nvim_create_augroup(
+    "ExplorerFilesBuffers",
+    { clear = true }
+)
+
+vim.api.nvim_create_autocmd(
+    { "BufEnter", "BufAdd", "BufDelete", "BufWipeout" },
+    {
+        group = augroup,
+        callback = function()
+            if state.win
+                and vim.api.nvim_win_is_valid(state.win) then
+                refresh()
+            end
+        end,
+    }
+)
 
 vim.keymap.set("n", "<C-h>", function()
     if state.win
