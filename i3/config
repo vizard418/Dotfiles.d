@@ -33,7 +33,6 @@ exec --no-startup-id xset s noblank
 exec --no-startup-id xset s noexpose
 exec --no-startup-id xset dpms 0 0 0
 
-
 # Factor DPI para monitores grandes
 exec --no-startup-id xrdb -merge ~/.Xresources
 
@@ -134,38 +133,39 @@ bindsym $mod+Shift+space floating toggle
 # ==============================================================================
 # SECCION: ESPACIOS DE TRABAJO (WORKSPACES) Y MONITORES
 # ==============================================================================
-
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "VGA"
-set $ws6 "HDMI"
-
 # Definicion de salidas de monitores
 set $mon1 LVDS-1
 set $mon2 VGA-1
 set $mon3 HDMI-1
+
+# Glifos Unicode para workspaces
+# Requiere font awesome
+set $ws1 "1 WEB: "
+set $ws2 "1 TERM: "
+set $ws3 "3 MSG: "
+set $ws4 "4 FILE: "
+set $ws5 "5 VGA: "
+set $ws6 "6 HDMI: "
 
 # Asignacion de workspaces a monitores segun preferencia
 workspace $ws5 output $mon2
 workspace $ws6 output $mon3
 
 # Cambiar a espacio de trabajo
-bindsym $mod+1 workspace number $ws1
-bindsym $mod+2 workspace number $ws2
-bindsym $mod+3 workspace number $ws3
-bindsym $mod+4 workspace number $ws4
-bindsym $mod+5 workspace number $ws5
-bindsym $mod+6 workspace number $ws6
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
 
 # Mover contenedor actual a espacio de trabajo
-bindsym $mod+Shift+1 move container to workspace number $ws1
-bindsym $mod+Shift+2 move container to workspace number $ws2
-bindsym $mod+Shift+3 move container to workspace number $ws3
-bindsym $mod+Shift+4 move container to workspace number $ws4
-bindsym $mod+Shift+5 move container to workspace number $ws5
-bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
 
 # ==============================================================================
 # SECCION: GESTION DE SESION Y MODO REDIMENSIONAR
