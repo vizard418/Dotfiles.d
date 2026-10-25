@@ -141,7 +141,7 @@ set $mon3 HDMI-1
 # Glifos Unicode para workspaces
 # Requiere font awesome
 set $ws1 "1 WEB: "
-set $ws2 "1 TERM: "
+set $ws2 "2 TERM: "
 set $ws3 "3 MSG: "
 set $ws4 "4 FILE: "
 set $ws5 "5 VGA: "
