@@ -140,12 +140,12 @@ set $mon3 HDMI-1
 
 # Glifos Unicode para workspaces
 # Requiere font awesome
-set $ws1 "1 WEB: "
-set $ws2 "2 TERM: "
-set $ws3 "3 MSG: "
-set $ws4 "4 FILE: "
-set $ws5 "5 VGA: "
-set $ws6 "6 HDMI: "
+set $ws1 "1:  WEB"
+set $ws2 "2:  TERM"
+set $ws3 "3:  MSG"
+set $ws4 "4:  FILE"
+set $ws5 "5:  HDMI"
+set $ws6 "6:  VGA"
 
 # Asignacion de workspaces a monitores segun preferencia
 workspace $ws5 output $mon2
@@ -178,10 +178,10 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Desea salir de i3?' -B 'Si, 
 
 # Modo para redimensionar ventanas con teclado
 mode "resize" {
-        bindsym $left        resize shrink width 10 px or 10 ppt
-        bindsym $down        resize grow height 10 px or 10 ppt
-        bindsym $up          resize shrink height 10 px or 10 ppt
-        bindsym $right       resize grow width 10 px or 10 ppt
+        bindsym Left        resize shrink width 10 px or 10 ppt
+        bindsym Down        resize grow height 10 px or 10 ppt
+        bindsym Up          resize shrink height 10 px or 10 ppt
+        bindsym Right       resize grow width 10 px or 10 ppt
 
         bindsym Return mode "default"
         bindsym Escape mode "default"
